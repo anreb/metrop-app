@@ -1,14 +1,9 @@
 const router = require('express').Router();
-const Delito = require('../models/User');
+const n_colec_estaciones = require('../models/Estaciones');
 const mongoose = require('mongoose');
 
-router.get('/', (req, res) => {
-	mongoose
-		.connect(process.env.DB, { useNewUrlParser: true, useUnifiedTopology: true })
-		.then((x) => {
-			console.log(x);
-		})
-		.catch((err) => console.error('Error connecting to mongo', err));
+router.get('/', async (req, res) => {
+	n_colec_estaciones.find().then((r) => res.status(200).json({ r })).catch((err) => console.log(err));
 });
 
 module.exports = router;

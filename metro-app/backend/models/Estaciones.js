@@ -10,18 +10,33 @@ const estacionesSchema = new Schema({
 	stop_lon: {
 		type: Number
 	},
-	primera_estacion: {
+	primera_linea: {
 		type: String
 	},
-	segunda_estacion: {
+	segunda_linea: {
 		type: String
 	},
-	tercera_estacion: {
+	tercera_linea: {
 		type: String
 	},
-	cuarta_estacion: {
+	cuarta_linea: {
+		type: String
+	},
+	calif_estacion: {
+		type: Number
+	},
+	ranking_estacion: {
+		type: Number
+	},
+	colonia: {
+		type: String
+	},
+	calif_colonia: {
+		type: String
+	},
+	ranking_colonia: {
 		type: String
 	}
 });
 
-module.exports = model('n_colec_estaciones', estacionesSchema);
+module.exports = model('estaciones_colonias_v1', estacionesSchema);

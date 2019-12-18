@@ -12,7 +12,7 @@ const passport = require('./config/passport');
 
 mongoose
 	.connect(process.env.DB, { useNewUrlParser: true, useUnifiedTopology: true })
-	.then((x) => console.log(`Connected to Mongo! Database name: "${x.connections[0].name}`))
+	.then((x) => console.log(`Connected to Mongo! Database name: "${x.connections[0].name}"`))
 	.catch((err) => console.error('Error connecting to mongo', err));
 
 const app_name = require('./package.json').name;
@@ -40,15 +40,19 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(cookieParser());
 app.use(logger('dev'));
 
 const index = require('./routes/index');
 const auth = require('./routes/auth');
+const estaciones = require('./routes/estaciones');
+const horarios = require('./routes/horarios');
 app.use('/', index);
-app.use('/', auth);
+app.use('/auth', auth);
+app.use('/estaciones', estaciones);
+app.use('/horarios', horarios);
 
 // Uncomment this line for production
 // app.get('/*', (req, res) => res.sendFile(__dirname + '/public/index.html'));

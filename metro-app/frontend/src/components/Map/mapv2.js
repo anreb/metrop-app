@@ -1,69 +1,53 @@
-import React, { Component } from 'react';
+import React from 'react';
+import { Link, Redirect } from 'react-router-dom';
+import { Component } from 'react';
+import ReactMapGL, { Marker, Popup } from 'react-map-gl';
 import mapboxgl from 'mapbox-gl';
-import MapboxDirections from '@mapbox/mapbox-gl-directions/dist/mapbox-gl-directions';
-import '@mapbox/mapbox-gl-directions/dist/mapbox-gl-directions.css';
 import MY_SERVICE from '../../services/index';
-mapboxgl.accessToken = 'pk.eyJ1IjoiYmVybmE5NyIsImEiOiJjazM2MjY3OW8wZGgzM2NxcmprdXVoYWZxIn0.SkzmTSB07rmtf1lhyVdBkA';
 
-class mapv2 extends Component {
+class Map extends Component {
 	state = {
-		lng: -99.1276627,
-		lat: 19.4284706,
-		zoom: 12,
+		viewport: {
+			width: '100%',
+			height: '100%',
+			latitude: 19.4284706,
+			longitude: -99.1276627,
+			bearing: 0,
+			pitch: 0,
+			zoom: 12
+		},
+		popupInfo: null,
+		showPopup: true,
+		estaciones: [],
 		position: []
 	};
 
 	componentDidMount() {
-		MY_SERVICE.test()
-			.then(({ data: { estaciones } }) => {
-				console.log(estaciones);
-			})
-			.catch((err) => console.log(err));
+		if (localStorage.user) {
+			MY_SERVICE.estaciones()
+				.then(({ data: { estaciones } }) => {
+					this.setState({ estaciones });
+				})
+				.catch((err) => console.log(err));
 
-		const { lng, lat, zoom } = this.state;
+			const map = this.reactMap.getMap();
+			const geolocate = new mapboxgl.GeolocateControl();
 
-		const geolocate = new mapboxgl.GeolocateControl({
-			positionOptions: {
-				enableHighAccuracy: true
-			},
-			trackUserLocation: true
-		});
-
-		const directions = new MapboxDirections({
-			accessToken: 'pk.eyJ1IjoiYmVybmE5NyIsImEiOiJjazM2MjY3OW8wZGgzM2NxcmprdXVoYWZxIn0.SkzmTSB07rmtf1lhyVdBkA',
-			unit: 'metric',
-			profile: 'mapbox/cycling'
-		});
-
-		const map = new mapboxgl.Map({
-			container: this.mapContainer,
-			style: 'mapbox://styles/mapbox/streets-v9',
-			center: [ lng, lat ],
-			zoom
-		});
-
-		map.on('load', () => {
-			geolocate.on('geolocate', function(e) {
-				let usr_lon = e.coords.longitude;
-				let usr_lat = e.coords.latitude;
-				let position = [ usr_lon, usr_lat ];
-				// this.setState({ position });
-				directions.setOrigin(position);
+			map.on('load', () => {
+				map.addControl(geolocate);
 			});
-		});
 
-		map.on('move', () => {
-			const { lng, lat } = map.getCenter();
-
-			this.setState({
-				lng: lng.toFixed(4),
-				lat: lat.toFixed(4),
-				zoom: map.getZoom().toFixed(2)
+			geolocate.on('geolocate', (e) => {
+				let lon = e.coords.longitude;
+				let lat = e.coords.latitude;
+				let position = [ lon, lat ];
+				this.setState({ position });
 			});
-		});
+		}
+	}
 
-		map.addControl(directions, 'top-left');
-		map.addControl(geolocate, 'bottom-right');
+	redirect() {
+		this.props.history.push('/login');
 	}
 
 	setColor(linea) {
@@ -90,12 +74,80 @@ class mapv2 extends Component {
 				return '#3F2893';
 			case 'Metro B':
 				return '#215B33';
+			default:
+				return '#FF8300';
 		}
 	}
 
+	_renderPopup() {
+		const { popupInfo } = this.state;
+		return (
+			popupInfo && (
+				<Popup
+					tipSize={10}
+					anchor='bottom'
+					longitude={popupInfo.stop_lon}
+					latitude={popupInfo.stop_lat}
+					closeOnClick={false}
+					onClose={() => this.setState({ popupInfo: null })}
+				>
+					<div>
+						<img src={popupInfo.imgUrl} alt={popupInfo.nombre_estacion} />
+						<Link estacion={popupInfo} to={`/estaciones/${popupInfo._id}`}>
+							<p>{popupInfo.nombre_estacion}</p>
+						</Link>
+					</div>
+				</Popup>
+			)
+		);
+	}
+
 	render() {
-		return <div style={{ width: '100vw', height: '100vh' }} ref={(e) => (this.mapContainer = e)} />;
+		const { estaciones, position } = this.state;
+		if (!localStorage.user) {
+			return <Redirect push to='/login' />;
+		}
+		return (
+			<ReactMapGL
+				ref={(reactMap) => (this.reactMap = reactMap)}
+				{...this.state.viewport}
+				mapboxApiAccessToken={
+					'pk.eyJ1IjoiYmVybmE5NyIsImEiOiJjazM2MjY3OW8wZGgzM2NxcmprdXVoYWZxIn0.SkzmTSB07rmtf1lhyVdBkA'
+				}
+				onViewportChange={(viewport) => this.setState({ viewport })}
+			>
+				{estaciones.map((estacion, idx) => (
+					<Marker
+						key={idx}
+						latitude={estacion.stop_lat}
+						longitude={estacion.stop_lon}
+						offsetLeft={-20}
+						offsetTop={-10}
+					>
+						<i
+							className='fa fa-map-marker'
+							aria-hidden='true'
+							onClick={() => this.setState({ popupInfo: estacion })}
+							style={{ color: this.setColor(estacion.primera_linea), fontSize: '32px' }}
+						/>
+					</Marker>
+				))}
+				{this._renderPopup()}
+				{position.length > 0 && (
+					<Popup
+						latitude={position[1]}
+						longitude={position[0]}
+						closeButton={true}
+						closeOnClick={false}
+						onClose={() => this.setState({ showPopup: false })}
+						anchor='top'
+					>
+						<Link to={`/usuario/${position}`}>Ver estaciones cercanas</Link>
+					</Popup>
+				)}
+			</ReactMapGL>
+		);
 	}
 }
 
-export default mapv2;
+export default Map;

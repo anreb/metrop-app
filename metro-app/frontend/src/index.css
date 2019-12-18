@@ -1,3 +1,8 @@
+@font-face {
+	font-family: 'METRO-DF';
+	src: local('METRO-DF'), url(./fonts/METRO-DF.TTF) format('truetype');
+}
+
 * {
 	margin: 0;
 	padding: 0;

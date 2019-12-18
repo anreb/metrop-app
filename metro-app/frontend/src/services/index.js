@@ -9,17 +9,29 @@ const service = axios.create({ withCredentials: false, baseURL });
 
 const MY_SERVICE = {
 	test: async () => {
-		console.log('codigo async');
 		return await service.get('/');
 	},
 	signup: async (user) => {
-		return await service.post('/signup', user);
+		return await service.post('/auth/signup', user);
 	},
 	login: async (user) => {
-		return await service.post('/login', user);
+		console.log(user);
+		return await service.post('/auth/login', user);
 	},
-	logOut: async () => {
-		return await service.get('/logout');
+	logout: async () => {
+		return await service.get('/auth/logout');
+	},
+	estaciones: async () => {
+		return await service.get('/estaciones');
+	},
+	feed: async (location) => {
+		return await service.post('/estaciones/usuario', { location: location });
+	},
+	estacion: async ({ id }) => {
+		return await service.get(`estaciones/${id}`);
+	},
+	horario: async (name) => {
+		return await service.get(`horarios/${name}`);
 	}
 };
 

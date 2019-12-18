@@ -4,11 +4,11 @@ const estacionesSchema = new Schema({
 	nombre_estacion: {
 		type: String
 	},
-	stop_lat: {
-		type: Number
-	},
-	stop_lon: {
-		type: Number
+	place: {
+		type: {
+			default: 'Point'
+		},
+		coordinates: [ Number ]
 	},
 	primera_linea: {
 		type: String
@@ -36,7 +36,24 @@ const estacionesSchema = new Schema({
 	},
 	ranking_colonia: {
 		type: String
+	},
+	afluencia_promedio: {
+		type: String
+	},
+	id_estacion: {
+		type: Schema.Types.ObjectId,
+		ref: 'horas_peligro_v2'
+	},
+	dia_mas_peligroso: {
+		type: String
+	},
+	imgUrl: {
+		type: String
 	}
 });
 
-module.exports = model('estaciones_colonias_v1', estacionesSchema);
+estacionesSchema.index({
+	place: '2dsphere'
+});
+
+module.exports = model('estaciones_colonias_v8', estacionesSchema);

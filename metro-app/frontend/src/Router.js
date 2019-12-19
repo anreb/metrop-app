@@ -28,7 +28,7 @@ class Router extends Component {
 			<MyContext.Consumer>
 				{(context) => {
 					return (
-						<Layout style={{ backgroundColor: '#C3C310' }}>
+						<Layout style={{ backgroundColor: '#B7AC44' }}>
 							<BrowserRouter style={{ height: '100vh' }}>
 								{!localStorage.user && <Redirect push to='/login' />}
 								<Header style={{ height: '10%', backgroundColor: '#F89000' }}>
@@ -50,29 +50,29 @@ class Router extends Component {
 											<Link to={localStorage.user ? '/map' : '/'}>Metro-Stats</Link>
 										</Menu.Item>
 										{!localStorage.user && (
-											<Menu.Item key='2' style={{ fontFamily: 'METRO-DF', fontSize: '10px' }}>
+											<Menu.Item key='2' style={{ fontFamily: 'METRO-DF', fontSize: '15px' }}>
 												<Link to='/login'>Entrar</Link>
 											</Menu.Item>
 										)}
 										{!localStorage.user && (
-											<Menu.Item key='3' style={{ fontFamily: 'METRO-DF', fontSize: '10px' }}>
+											<Menu.Item key='3' style={{ fontFamily: 'METRO-DF', fontSize: '15px' }}>
 												<Link to='/signup'>Registrarse</Link>
 											</Menu.Item>
 										)}
 										{localStorage.user && (
-											<Menu.Item key='4' style={{ fontFamily: 'METRO-DF', fontSize: '10px' }}>
+											<Menu.Item key='4' style={{ fontFamily: 'METRO-DF', fontSize: '15px' }}>
 												<Link to='/map'>Mapa</Link>
 											</Menu.Item>
 										)}
 										{localStorage.user && (
-											<Menu.Item key='5' style={{ fontFamily: 'METRO-DF', fontSize: '10px' }}>
+											<Menu.Item key='5' style={{ fontFamily: 'METRO-DF', fontSize: '15px' }}>
 												<Link to='/ranking'>Ranking</Link>
 											</Menu.Item>
 										)}
 										{localStorage.user && (
 											<Menu.Item
 												key='6'
-												style={{ fontFamily: 'METRO-DF', fontSize: '10px' }}
+												style={{ fontFamily: 'METRO-DF', fontSize: '15px' }}
 												onClick={context.logout}
 											>
 												Salir
@@ -94,8 +94,18 @@ class Router extends Component {
 										</Switch>
 									</div>
 								</Content>
-								<Footer style={{ height: '10%', backgroundColor: '#F89000' }}>
-									METRO-CDMX©2019 Created by @anreb
+								<Footer
+									style={{
+										height: '10%',
+										backgroundColor: '#F89000',
+										fontFamily: 'METRO-DF',
+										color: '#FFF'
+									}}
+								>
+									METRO-CDMX©2019 Creado por{' '}
+									<a href='http://https://github.com/anreb' target='_blank' rel='noopener noreferrer'>
+										@anreb
+									</a>
 								</Footer>
 							</BrowserRouter>
 						</Layout>

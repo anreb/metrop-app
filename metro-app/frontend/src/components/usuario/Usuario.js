@@ -32,7 +32,6 @@ class Usuario extends Component {
 		const { estaciones } = this.state;
 		return (
 			<List
-				key='una-llave'
 				itemLayout='horizontal'
 				style={{ height: '100%' }}
 				dataSource={estaciones}

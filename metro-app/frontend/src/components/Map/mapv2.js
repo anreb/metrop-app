@@ -109,7 +109,10 @@ class Map extends Component {
 			return <Redirect push to='/login' />;
 		}
 		return (
-			<ReactMapGL
+			<>
+				<h2 style={{fontFamily: 'METRO-DF'}}>Haz click en la brujala para ver estaciones cercanas</h2>
+				<h2 style={{fontFamily: 'METRO-DF'}}>Haz click sobre los pines para ver la estacion</h2>
+				<ReactMapGL
 				ref={(reactMap) => (this.reactMap = reactMap)}
 				{...this.state.viewport}
 				mapboxApiAccessToken={
@@ -150,6 +153,7 @@ class Map extends Component {
 					</Popup>
 				)}
 			</ReactMapGL>
+			</>
 		);
 	}
 }

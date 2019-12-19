@@ -11,9 +11,14 @@ class StationList extends Component {
 	componentDidMount() {
 		MY_SERVICE.estaciones()
 			.then(({ data: { estaciones } }) => {
-				console.log(estaciones);
 				estaciones.sort((a, b) => a.ranking_estacion - b.ranking_estacion);
-				this.setState({ estaciones: estaciones });
+				this.setState({
+					estaciones: estaciones.map((el) => {
+						let nombre = el.nombre_estacion.split('_');
+						el.nombre_estacion = nombre[0];
+						return el;
+					})
+				});
 			})
 			.catch((err) => console.log(err));
 	}
@@ -23,12 +28,12 @@ class StationList extends Component {
 		return (
 			<List
 				itemLayout='horizontal'
-				style={{ overflow: 'scroll', height: '100%' }}
+				style={{ height: '100%' }}
 				dataSource={estaciones}
 				renderItem={(item) => (
 					<List.Item>
 						<List.Item.Meta
-							avatar={<img src={item.imgUrl} style={{ width: '50px' }} />}
+							avatar={<img alt={item.nombre_estacion} src={item.imgUrl} style={{ width: '50px' }} />}
 							title={
 								<Link
 									to={`/estaciones/${item._id}`}

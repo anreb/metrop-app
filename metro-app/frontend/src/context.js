@@ -27,7 +27,6 @@ class MyProvider extends Component {
 		console.log(email, password);
 		MY_SERVICE.login({ email, password })
 			.then(({ data }) => {
-				console.log(data);
 				localStorage.setItem('user', JSON.stringify(data));
 				this.setState({ logged: true });
 			})
@@ -35,7 +34,6 @@ class MyProvider extends Component {
 	};
 
 	loginInputChange = ({ target: { value, name } }) => {
-		console.log(this.state.login);
 		this.setState({
 			...this.state,
 			login: {

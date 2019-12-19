@@ -27,20 +27,19 @@ class Station extends React.Component {
 	}
 
 	render() {
-		console.log(this.state);
 		const { horario, estacion, nombre } = this.state;
 		return (
-			<div style={{ overflow: 'scroll', height: '100%', width: '100%' }}>
+			<div key='llave-random'>
 				<Row gutter={30}>
 					<Col span={6}>
 						<img alt={nombre} src={estacion.imgUrl} style={{ width: '75px' }} />
 					</Col>
-					<Col span={9}>
-						<Title level={3} style={{ fontFamily: 'METRO-DF', height: '80px' }}>
+					<Col span={12}>
+						<Title level={3} style={{ fontFamily: 'METRO-DF', fontSize: '20px' }}>
 							{nombre}
 						</Title>
 					</Col>
-					<Col span={9}>
+					<Col span={6}>
 						<Statistic
 							title='Ranking'
 							value={`${estacion.ranking_estacion}/195`}
@@ -49,8 +48,7 @@ class Station extends React.Component {
 					</Col>
 				</Row>
 				<Row gutter={30}>
-					<Col span={3} />
-					<Col span={18} style={{ textAlign: 'center' }}>
+					<Col span={24} style={{ textAlign: 'center' }}>
 						<Bar
 							data={{
 								labels: [
@@ -123,7 +121,6 @@ class Station extends React.Component {
 							}}
 						/>
 					</Col>
-					<Col span={3} />
 				</Row>
 				<Row gutter={30}>
 					<Col span={3} />

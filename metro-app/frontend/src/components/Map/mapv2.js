@@ -9,7 +9,7 @@ class Map extends Component {
 	state = {
 		viewport: {
 			width: '100%',
-			height: '100%',
+			height: '610px',
 			latitude: 19.4284706,
 			longitude: -99.1276627,
 			bearing: 0,
@@ -19,7 +19,8 @@ class Map extends Component {
 		popupInfo: null,
 		showPopup: true,
 		estaciones: [],
-		position: []
+		position: [],
+		nombre: ''
 	};
 
 	componentDidMount() {
@@ -80,7 +81,7 @@ class Map extends Component {
 	}
 
 	_renderPopup() {
-		const { popupInfo } = this.state;
+		const { popupInfo, nombre } = this.state;
 		return (
 			popupInfo && (
 				<Popup
@@ -91,10 +92,10 @@ class Map extends Component {
 					closeOnClick={false}
 					onClose={() => this.setState({ popupInfo: null })}
 				>
-					<div>
+					<div style={{ padding: '5px' }}>
 						<img src={popupInfo.imgUrl} alt={popupInfo.nombre_estacion} />
 						<Link estacion={popupInfo} to={`/estaciones/${popupInfo._id}`}>
-							<p>{popupInfo.nombre_estacion}</p>
+							<p style={{ fontFamily: 'METRO-DF', fontSize: '15px' }}>{nombre}</p>
 						</Link>
 					</div>
 				</Popup>
@@ -116,22 +117,25 @@ class Map extends Component {
 				}
 				onViewportChange={(viewport) => this.setState({ viewport })}
 			>
-				{estaciones.map((estacion, idx) => (
-					<Marker
-						key={idx}
-						latitude={estacion.stop_lat}
-						longitude={estacion.stop_lon}
-						offsetLeft={-20}
-						offsetTop={-10}
-					>
-						<i
-							className='fa fa-map-marker'
-							aria-hidden='true'
-							onClick={() => this.setState({ popupInfo: estacion })}
-							style={{ color: this.setColor(estacion.primera_linea), fontSize: '32px' }}
-						/>
-					</Marker>
-				))}
+				{estaciones.map((estacion, idx) => {
+					const nombre = estacion.nombre_estacion.split('_');
+					return (
+						<Marker
+							key={idx}
+							latitude={estacion.stop_lat}
+							longitude={estacion.stop_lon}
+							offsetLeft={-20}
+							offsetTop={-10}
+						>
+							<i
+								className='fa fa-map-marker'
+								aria-hidden='true'
+								onClick={() => this.setState({ popupInfo: estacion, nombre: nombre[0] })}
+								style={{ color: this.setColor(estacion.primera_linea), fontSize: '32px' }}
+							/>
+						</Marker>
+					);
+				})}
 				{this._renderPopup()}
 				{position.length > 0 && (
 					<Popup

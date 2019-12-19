@@ -22,7 +22,7 @@ class Signup extends Component {
 		console.log('signin up');
 		MY_SERVICE.signup({ email, name, password })
 			.then((user) => {
-				console.log(user);
+				console.log('User logged');
 			})
 			.catch((err) => console.log(err));
 	};
@@ -37,7 +37,9 @@ class Signup extends Component {
 	render() {
 		const { getFieldDecorator } = this.props.form;
 		return (
-			<div style={{ padding: '5rem 1.5rem 1.5rem 1.5rem', display: 'flex', justifyContent: 'center' }}>
+			<div
+				style={{ padding: '5rem 1.5rem 1.5rem 1.5rem', display: 'flex', justifyContent: 'center', height: 620 }}
+			>
 				{localStorage.user ? (
 					this.redirect()
 				) : (

@@ -6,11 +6,6 @@ import { MyContext } from '../../context';
 const { Title } = Typography;
 
 class Login extends Component {
-	// state = {
-	// 	email: '',
-	// 	password: ''
-	// };
-
 	redirect() {
 		this.props.history.push('/map');
 	}
@@ -22,7 +17,12 @@ class Login extends Component {
 				{(context) => {
 					return (
 						<div
-							style={{ padding: '5rem 1.5rem 1.5rem 1.5rem', display: 'flex', justifyContent: 'center' }}
+							style={{
+								padding: '5rem 1.5rem 1.5rem 1.5rem',
+								display: 'flex',
+								justifyContent: 'center',
+								height: 620
+							}}
 						>
 							{localStorage.user ? (
 								this.redirect()

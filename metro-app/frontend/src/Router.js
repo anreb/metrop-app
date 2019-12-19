@@ -23,28 +23,31 @@ class Router extends Component {
 		logged: false
 	};
 
-	componentDidMount() {
-		console.log(this.context);
-	}
-
 	render() {
 		return (
 			<MyContext.Consumer>
 				{(context) => {
 					return (
-						<Layout>
-							<BrowserRouter>
+						<Layout style={{ backgroundColor: '#C3C310' }}>
+							<BrowserRouter style={{ height: '100vh' }}>
 								{!localStorage.user && <Redirect push to='/login' />}
-								<Header>
+								<Header style={{ height: '10%', backgroundColor: '#F89000' }}>
 									<div className='logo' />
 									<Menu
 										theme='dark'
 										mode='horizontal'
-										defaultSelectedKeys={[ '2' ]}
-										style={{ lineHeight: '64px', display: 'flex' }}
+										defaultSelectedKeys={[ '1' ]}
+										style={{ lineHeight: '64px', display: 'flex', backgroundColor: '#F89000' }}
 									>
-										<Menu.Item key='1' style={{ fontFamily: 'METRO-DF', alignSelf: 'flex-start' }}>
-											<Link to={localStorage.user ? '/map' : '/login'}>MetroCDMX</Link>
+										<Menu.Item
+											key='1'
+											style={{
+												fontFamily: 'METRO-DF',
+												alignSelf: 'flex-start',
+												fontSize: '20px'
+											}}
+										>
+											<Link to={localStorage.user ? '/map' : '/'}>Metro-Stats</Link>
 										</Menu.Item>
 										{!localStorage.user && (
 											<Menu.Item key='2' style={{ fontFamily: 'METRO-DF', fontSize: '10px' }}>
@@ -57,18 +60,18 @@ class Router extends Component {
 											</Menu.Item>
 										)}
 										{localStorage.user && (
-											<Menu.Item key='3' style={{ fontFamily: 'METRO-DF', fontSize: '10px' }}>
+											<Menu.Item key='4' style={{ fontFamily: 'METRO-DF', fontSize: '10px' }}>
 												<Link to='/map'>Mapa</Link>
 											</Menu.Item>
 										)}
 										{localStorage.user && (
-											<Menu.Item key='3' style={{ fontFamily: 'METRO-DF', fontSize: '10px' }}>
+											<Menu.Item key='5' style={{ fontFamily: 'METRO-DF', fontSize: '10px' }}>
 												<Link to='/ranking'>Ranking</Link>
 											</Menu.Item>
 										)}
 										{localStorage.user && (
 											<Menu.Item
-												key='4'
+												key='6'
 												style={{ fontFamily: 'METRO-DF', fontSize: '10px' }}
 												onClick={context.logout}
 											>
@@ -77,8 +80,8 @@ class Router extends Component {
 										)}
 									</Menu>
 								</Header>
-								<Content style={{ padding: '50px 0 50px 0', height: '600px' }}>
-									<div style={{ background: '#fff', padding: 15, height: '100%' }}>
+								<Content style={{ padding: '30px 0 30px 0', height: '80%' }}>
+									<div style={{ background: '#fff', padding: 5, height: '100%' }}>
 										<Switch>
 											<Route exact path='/' component={Home} />
 											<Route exact path='/login' component={Login} />
@@ -91,7 +94,9 @@ class Router extends Component {
 										</Switch>
 									</div>
 								</Content>
-								<Footer style={{ textAlign: 'center' }}>METRO-CDMX©2019 Created by @anreb</Footer>
+								<Footer style={{ height: '10%', backgroundColor: '#F89000' }}>
+									METRO-CDMX©2019 Created by @anreb
+								</Footer>
 							</BrowserRouter>
 						</Layout>
 					);
